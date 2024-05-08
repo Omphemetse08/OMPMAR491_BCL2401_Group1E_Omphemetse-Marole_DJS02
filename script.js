@@ -1,31 +1,36 @@
-const form = document.querySelector("[data-form]");
-const result = document.querySelector("[data-result]");
+// Import necessary functions (assuming they exist in separate files)
+import { getFormValues, displayResult } from "./utils.js"; // Modify path if needed
 
-form.addEventListener("submit", (event) => {
-  event.preventDefault();
+function calculateWholeNumberDivision() {
+  // Get form values using imported function
+  const formData = getFormValues();
 
-  // Get input values
-  const dividendInput = document.querySelector('input[name="dividend"]');
-  const divisorInput = document.querySelector('input[name="divider"]');
-
-  const dividend = parseFloat(dividendInput.value);
-  const divisor = parseFloat(divisorInput.value);
-
-  // Validate inputs (check for empty or non-numeric values)
-  if (isNaN(dividend) || isNaN(divisor)) {
-    result.textContent = "Error: Please enter valid numbers.";
-    return; // Exit function if validation fails
-  }
-
-  // Validate division by zero
-  if (divisor === 0) {
-    result.textContent = "Error: Division by zero is not allowed.";
+  // Validate inputs (assuming validation function exists in utils.js)
+  const errorMessage = validateInputs(formData);
+  if (errorMessage) {
+    displayResult(errorMessage);
     return;
   }
 
-  // Perform calculation
-  const resultValue = dividend / divisor;
+  const dividend = parseFloat(formData.dividend);
+  const divider = parseFloat(formData.divider);
 
-  // Display result with appropriate formatting
-  result.textContent = `Result: ${resultValue.toFixed()}`; // Show result with 0 decimals
+  // Handle division by zero
+  if (divider === 0) {
+    displayResult("Division by zero is not allowed!");
+    return;
+  }
+
+  // Perform division and ensure whole number result
+  const result = Math.floor(dividend / divider);
+
+  // Display the result using imported function
+  displayResult(result);
+}
+
+// Add event listener for form submission
+const form = document.querySelector('form[data-form="data-form"]');
+form.addEventListener("submit", (event) => {
+  event.preventDefault(); // Prevent default form submission behavior
+  calculateWholeNumberDivision();
 });
